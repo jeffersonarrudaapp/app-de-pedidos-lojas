@@ -523,7 +523,6 @@ th {
     grid-template-columns: 1fr;
   }
 }
-
 @media (max-width: 900px) {
   .store-grid,
   .supplier-grid,
@@ -541,4 +540,26 @@ th {
   .control-group {
     justify-content: flex-end;
   }
+}
+
+.titulo-app {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.4px;
+  color: #111827;
+  max-width: 320px;
+}
+
+.titulo-app span {
+  display: block;
+}
+
+.subtitulo-app {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #6b7280;
+  max-width: 520px;
 }

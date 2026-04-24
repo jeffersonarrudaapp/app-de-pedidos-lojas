@@ -591,8 +591,11 @@ export default function App() {
           <div className="card">
             <div className="card-header">
               <div>
-                <h1>App de Pedidos das Lojas</h1>
-                <p>Versão pronta para salvar pedidos em banco de dados com Supabase.</p>
+                <h1 className="titulo-app">
+  <span>App de Pedidos</span>
+  <span>das Lojas</span>
+</h1>
+<p className="subtitulo-app">Versão pronta para salvar pedidos em banco de dados com Supabase.</p>
               </div>
               <div className="icon-box">
                 <ShoppingCart size={28} />
