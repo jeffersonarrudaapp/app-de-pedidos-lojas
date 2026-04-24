@@ -109,3 +109,18 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+.resumo-titulo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: center;
+}
+
+.resumo-subtitulo {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #64748b;
+  text-align: center;
+  max-width: 280px;
+}

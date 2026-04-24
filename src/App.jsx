@@ -247,7 +247,7 @@ const fornecedores = Array.from(new Set(produtos.map((p) => p.fornecedor))).sort
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
+const ADMIN_PASSWORD = "9104";
 const supabase =
   SUPABASE_URL && SUPABASE_ANON_KEY
     ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
@@ -275,24 +275,67 @@ function formatarData(dataIso) {
     return dataIso;
   }
 }
-
 async function salvarPedidoNoSupabase(payload) {
   if (!supabase) throw new Error("Supabase não configurado");
 
-  const { data: pedido, error: pedidoError } = await supabase
-    .from("pedidos")
-    .insert({
-      loja: payload.loja,
-      fornecedor: payload.fornecedor,
-      status: "enviado",
-    })
-    .select()
-    .single();
+  const hoje = new Date().toISOString().slice(0, 10);
 
-  if (pedidoError) throw pedidoError;
+  const { data: pedidoExistente, error: buscaError } = await supabase
+    .from("pedidos")
+    .select("id")
+    .eq("loja", payload.loja)
+    .eq("fornecedor", payload.fornecedor)
+    .eq("data_pedido", hoje)
+    .maybeSingle();
+
+  if (buscaError) throw buscaError;
+
+  let pedidoId = null;
+  let pedidoFinal = null;
+
+  if (pedidoExistente) {
+    pedidoId = pedidoExistente.id;
+
+    const { error: deleteItensError } = await supabase
+      .from("pedido_itens")
+      .delete()
+      .eq("pedido_id", pedidoId);
+
+    if (deleteItensError) throw deleteItensError;
+
+    const { data: pedidoAtualizado, error: updateError } = await supabase
+      .from("pedidos")
+      .update({
+        loja: payload.loja,
+        fornecedor: payload.fornecedor,
+        status: "enviado",
+        data_pedido: hoje,
+      })
+      .eq("id", pedidoId)
+      .select()
+      .single();
+
+    if (updateError) throw updateError;
+    pedidoFinal = pedidoAtualizado;
+  } else {
+    const { data: pedidoNovo, error: pedidoError } = await supabase
+      .from("pedidos")
+      .insert({
+        loja: payload.loja,
+        fornecedor: payload.fornecedor,
+        status: "enviado",
+        data_pedido: hoje,
+      })
+      .select()
+      .single();
+
+    if (pedidoError) throw pedidoError;
+    pedidoId = pedidoNovo.id;
+    pedidoFinal = pedidoNovo;
+  }
 
   const itensInsert = payload.itens.map((item) => ({
-    pedido_id: pedido.id,
+    pedido_id: pedidoId,
     cod_produto: item.cod_produto,
     produto: item.nome,
     fornecedor: item.fornecedor,
@@ -301,20 +344,30 @@ async function salvarPedidoNoSupabase(payload) {
     quantidade: item.quantidade,
   }));
 
-  const { error: itensError } = await supabase.from("pedido_itens").insert(itensInsert);
-  if (itensError) throw itensError;
+  if (itensInsert.length > 0) {
+    const { error: itensError } = await supabase
+      .from("pedido_itens")
+      .insert(itensInsert);
 
-  return { ...pedido, itens: payload.itens };
+    if (itensError) throw itensError;
+  }
+
+  return { ...pedidoFinal, itens: payload.itens };
 }
-
-async function carregarPedidosDoSupabase() {
+async function carregarPedidosDoSupabase(dataFiltro = null) {
   if (!supabase) return [];
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("pedidos")
-    .select("id, created_at, loja, fornecedor, status, pedido_itens(*)")
+    .select("id, created_at, data_pedido, loja, fornecedor, status, pedido_itens(*)")
     .order("created_at", { ascending: false })
-    .limit(50);
+    .limit(100);
+
+  if (dataFiltro) {
+    query = query.eq("data_pedido", dataFiltro);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
 
@@ -323,7 +376,6 @@ async function carregarPedidosDoSupabase() {
     itens: pedido.pedido_itens || [],
   }));
 }
-
 function montarResumoConsolidado(pedidos) {
   const mapa = new Map();
 
@@ -446,17 +498,46 @@ function OrdersList({ pedidos, carregando, onRefresh }) {
   );
 }
 
-function TabelaResumoConsolidado({ pedidos }) {
+function TabelaResumoConsolidado({ pedidos, dataFiltro, setDataFiltro, onLimparData }) {
   const resumo = montarResumoConsolidado(pedidos);
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <div>
-          <h3>Resumo geral consolidado</h3>
-          <p>Visualização no estilo planilha com cada loja e o total final.</p>
-        </div>
+      <div className="card">
+    <div className="card-header resumo-header">
+      <div>
+        <h3>Resumo geral consolidado</h3>
+        <p>Visualização no estilo planilha com cada loja e o total final.</p>
       </div>
+
+      <div className="resumo-filtros">
+  <label className="resumo-label">Data do pedido</label>
+
+  <div className="resumo-data-acoes">
+    <input
+      type="date"
+      className="input"
+      value={dataFiltro}
+      onChange={(e) => setDataFiltro(e.target.value)}
+    />
+
+    <button
+      type="button"
+      className="btn outline small"
+      onClick={() => setDataFiltro(new Date().toISOString().slice(0, 10))}
+    >
+      Hoje
+    </button>
+
+    <button
+      type="button"
+      className="btn outline small btn-admin"
+      onClick={onLimparData}
+    >
+      Limpar
+    </button>
+  </div>
+</div>
+    </div>
       <div className="card-content">
         {resumo.length === 0 ? (
           <div className="box-muted">Nenhum dado consolidado ainda.</div>
@@ -507,6 +588,7 @@ export default function App() {
   const [fornecedor, setFornecedor] = useState("");
   const [busca, setBusca] = useState("");
   const [quantidades, setQuantidades] = useState({});
+  const [dataFiltro, setDataFiltro] = useState(new Date().toISOString().slice(0, 10));
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
   const [modoConectado, setModoConectado] = useState(!!supabase);
@@ -537,24 +619,64 @@ export default function App() {
   const salvarQuantidade = (id, valor) => {
     setQuantidades((q) => ({ ...q, [id]: valor }));
   };
+const verificarPedidoExistente = async (lojaSelecionada, fornecedorSelecionado) => {
+  if (!supabase) return false;
 
-  const carregarPedidos = async () => {
-    setCarregandoPedidos(true);
-    try {
-      const dados = await carregarPedidosDoSupabase();
-      setPedidos(dados);
-      setModoConectado(!!supabase);
-    } catch {
-      setPedidos([]);
-      setModoConectado(false);
-    } finally {
-      setCarregandoPedidos(false);
+  const hoje = dataFiltro;
+
+  const { data, error } = await supabase
+    .from("pedidos")
+    .select("id, loja, fornecedor, data_pedido, pedido_itens(*)")
+    .eq("loja", lojaSelecionada)
+    .eq("fornecedor", fornecedorSelecionado)
+    .eq("data_pedido", hoje)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  if (!data) return false;
+
+  const confirmar = window.confirm(
+    `A loja ${lojaSelecionada} já fez um pedido para ${fornecedorSelecionado} hoje. Deseja editar esse pedido?`
+  );
+
+  if (!confirmar) {
+    return true;
+  }
+
+  const novasQuantidades = {};
+  (data.pedido_itens || []).forEach((item) => {
+    const produtoEncontrado = produtos.find(
+      (p) => String(p.cod_produto) === String(item.cod_produto)
+    );
+    if (produtoEncontrado) {
+      novasQuantidades[produtoEncontrado.id] = Number(item.quantidade || 0);
     }
-  };
+  });
+
+  setQuantidades(novasQuantidades);
+  setBusca("");
+  setStep(3);
+
+  return true;
+};
+  const carregarPedidos = async () => {
+  setCarregandoPedidos(true);
+  try {
+    const dados = await carregarPedidosDoSupabase(dataFiltro);
+    setPedidos(dados);
+    setModoConectado(!!supabase);
+  } catch {
+    setPedidos([]);
+    setModoConectado(false);
+  } finally {
+    setCarregandoPedidos(false);
+  }
+};
 
   useEffect(() => {
-    carregarPedidos();
-  }, []);
+  carregarPedidos();
+}, [dataFiltro]);
 
   const enviarPedido = async () => {
     setErro("");
@@ -576,14 +698,70 @@ export default function App() {
   };
 
   const resetar = () => {
-    setStep(1);
+  setStep(1);
+  setLoja("");
+  setFornecedor("");
+  setBusca("");
+  setQuantidades({});
+  setErro("");
+  carregarPedidos();
+};
+const limparPedidosDaData = async () => {
+  const senha = window.prompt("Digite a senha de administrador para limpar os pedidos desta data:");
+
+  if (senha === null) return;
+
+  if (senha !== ADMIN_PASSWORD) {
+    alert("Senha incorreta.");
+    return;
+  }
+
+  const confirmar = window.confirm(
+    `Tem certeza que deseja apagar todos os pedidos da data ${dataFiltro}?`
+  );
+
+  if (!confirmar) return;
+
+  try {
+    const { data: pedidosDaData, error: buscaError } = await supabase
+      .from("pedidos")
+      .select("id")
+      .eq("data_pedido", dataFiltro);
+
+    if (buscaError) throw buscaError;
+
+    const ids = (pedidosDaData || []).map((p) => p.id);
+
+    if (ids.length > 0) {
+      const { error: deleteItensError } = await supabase
+        .from("pedido_itens")
+        .delete()
+        .in("pedido_id", ids);
+
+      if (deleteItensError) throw deleteItensError;
+
+      const { error: deletePedidosError } = await supabase
+        .from("pedidos")
+        .delete()
+        .in("id", ids);
+
+      if (deletePedidosError) throw deletePedidosError;
+    }
+
     setLoja("");
     setFornecedor("");
     setBusca("");
     setQuantidades({});
     setErro("");
-  };
+    setStep(1);
 
+    await carregarPedidos();
+    alert("Pedidos da data removidos com sucesso.");
+  } catch (error) {
+    alert("Não foi possível limpar os pedidos dessa data.");
+    console.error(error);
+  }
+};
   return (
     <div className="page">
       <div className="container">
@@ -663,7 +841,17 @@ export default function App() {
                       return (
                         <button
                           key={nome}
-                          onClick={() => setFornecedor(nome)}
+                          onClick={async () => {
+  setFornecedor(nome);
+  try {
+    const existe = await verificarPedidoExistente(loja, nome);
+    if (!existe) {
+      setFornecedor(nome);
+    }
+  } catch {
+    alert("Não foi possível verificar o pedido existente.");
+  }
+}}
                           className={`store-card ${ativo ? "active" : ""}`}
                         >
                           <Building2 size={24} />
@@ -675,9 +863,22 @@ export default function App() {
                   </div>
 
                   <div className="actions-end">
-                    <button disabled={!fornecedor} className="btn" onClick={() => setStep(3)}>
-                      Ver produtos <ChevronRight size={16} />
-                    </button>
+                <button
+  disabled={!fornecedor}
+  className="btn"
+  onClick={async () => {
+    try {
+      const existe = await verificarPedidoExistente(loja, fornecedor);
+      if (!existe) {
+        setStep(3);
+      }
+    } catch {
+      alert("Não foi possível verificar o pedido existente.");
+    }
+  }}
+>
+  Ver produtos <ChevronRight size={16} />
+</button>
                   </div>
                 </div>
               )}
@@ -796,8 +997,8 @@ export default function App() {
           <div className="card">
             <div className="card-header">
               <div>
-                <h3>Resumo rápido</h3>
-                <p>Visão simples para o funcionário preencher sem erro.</p>
+                <h3 className="resumo-titulo">Resumo rápido</h3>
+<p className="resumo-subtitulo">Visão simples para o funcionário preencher sem erro.</p>  
               </div>
             </div>
             <div className="card-content stats">
@@ -830,7 +1031,12 @@ export default function App() {
 
         <div className="main-grid">
           <div className="side-column">
-            <TabelaResumoConsolidado pedidos={pedidos} />
+            <TabelaResumoConsolidado
+  pedidos={pedidos}
+  dataFiltro={dataFiltro}
+  setDataFiltro={setDataFiltro}
+  onLimparData={limparPedidosDaData}
+/>
             <OrdersList pedidos={pedidos} carregando={carregandoPedidos} onRefresh={carregarPedidos} />
           </div>
         </div>
