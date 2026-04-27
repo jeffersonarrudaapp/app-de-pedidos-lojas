@@ -687,9 +687,9 @@ const verificarPedidoExistente = async (lojaSelecionada, fornecedorSelecionado) 
         fornecedor,
         itens: itensSelecionados,
       };
-      const novoPedido = await salvarPedidoNoSupabase(payload);
-      setPedidos((atual) => [novoPedido, ...atual]);
-      setStep(5);
+      await salvarPedidoNoSupabase(payload);
+await carregarPedidos();
+setStep(5);
     } catch {
       setErro("Não foi possível salvar o pedido agora.");
     } finally {
