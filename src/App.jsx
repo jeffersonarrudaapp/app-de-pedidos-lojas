@@ -497,10 +497,26 @@ function OrdersList({ pedidos, carregando, onRefresh }) {
     </div>
   );
 }
+function TabelaResumoConsolidado({
+  pedidos,
+  dataFiltro,
+  setDataFiltro,
+  onLimparData,
+  filtroLojaResumo,
+  setFiltroLojaResumo,
+  filtroFornecedorResumo,
+  setFiltroFornecedorResumo,
+}) {
+const pedidosFiltradosResumo = pedidos.filter((pedido) => {
+  const okLoja = filtroLojaResumo ? pedido.loja === filtroLojaResumo : true;
+  const okFornecedor = filtroFornecedorResumo
+    ? pedido.fornecedor === filtroFornecedorResumo
+    : true;
 
-function TabelaResumoConsolidado({ pedidos, dataFiltro, setDataFiltro, onLimparData }) {
-  const resumo = montarResumoConsolidado(pedidos);
+  return okLoja && okFornecedor;
+});
 
+const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
   return (
       <div className="card">
     <div className="card-header resumo-header">
@@ -535,6 +551,34 @@ function TabelaResumoConsolidado({ pedidos, dataFiltro, setDataFiltro, onLimparD
     >
       Limpar
     </button>
+  </div>
+
+  <div className="resumo-data-acoes">
+    <select
+      className="input"
+      value={filtroLojaResumo}
+      onChange={(e) => setFiltroLojaResumo(e.target.value)}
+    >
+      <option value="">Todas as lojas</option>
+      {lojas.map((nome) => (
+        <option key={nome} value={nome}>
+          {nome}
+        </option>
+      ))}
+    </select>
+
+    <select
+      className="input"
+      value={filtroFornecedorResumo}
+      onChange={(e) => setFiltroFornecedorResumo(e.target.value)}
+    >
+      <option value="">Todos os fornecedores</option>
+      {fornecedores.map((nome) => (
+        <option key={nome} value={nome}>
+          {nome}
+        </option>
+      ))}
+    </select>
   </div>
 </div>
     </div>
@@ -589,6 +633,8 @@ export default function App() {
   const [busca, setBusca] = useState("");
   const [quantidades, setQuantidades] = useState({});
   const [dataFiltro, setDataFiltro] = useState(new Date().toISOString().slice(0, 10));
+  const [filtroLojaResumo, setFiltroLojaResumo] = useState("");
+  const [filtroFornecedorResumo, setFiltroFornecedorResumo] = useState("");
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
   const [modoConectado, setModoConectado] = useState(!!supabase);
@@ -677,7 +723,22 @@ const verificarPedidoExistente = async (lojaSelecionada, fornecedorSelecionado) 
   useEffect(() => {
   carregarPedidos();
 }, [dataFiltro]);
+const abrirProdutosDoFornecedor = async (nomeFornecedor) => {
+  setFornecedor(nomeFornecedor);
 
+  try {
+    const existe = await verificarPedidoExistente(loja, nomeFornecedor);
+
+    if (!existe) {
+      setStep(3);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  } catch {
+    alert("Não foi possível verificar o pedido existente.");
+  }
+};
   const enviarPedido = async () => {
     setErro("");
     setSalvando(true);
@@ -824,64 +885,35 @@ const limparPedidosDaData = async () => {
               )}
 
               {step === 2 && (
-                <div className="space-y">
-                  <div className="title-row">
-                    <button className="btn outline small" onClick={() => setStep(1)}>
-                      <ChevronLeft size={16} />
-                    </button>
-                    <div>
-                      <h2>Filtre a empresa</h2>
-                      <p>Escolha o fornecedor para mostrar só os produtos daquela empresa.</p>
-                    </div>
-                  </div>
+  <div className="space-y">
+    <div className="title-row">
+      <button className="btn outline small" onClick={() => setStep(1)}>
+        <ChevronLeft size={16} />
+      </button>
+      <div>
+        <h2>Filtre a empresa</h2>
+        <p>Escolha o fornecedor para mostrar só os produtos daquela empresa.</p>
+      </div>
+    </div>
 
-                  <div className="supplier-grid">
-                    {fornecedores.map((nome) => {
-                      const ativo = fornecedor === nome;
-                      return (
-                        <button
-                          key={nome}
-                          onClick={async () => {
-  setFornecedor(nome);
-  try {
-    const existe = await verificarPedidoExistente(loja, nome);
-    if (!existe) {
-      setFornecedor(nome);
-    }
-  } catch {
-    alert("Não foi possível verificar o pedido existente.");
-  }
-}}
-                          className={`store-card ${ativo ? "active" : ""}`}
-                        >
-                          <Building2 size={24} />
-                          <p>{nome}</p>
-                          <span>Ver produtos deste fornecedor</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="actions-end">
-                <button
-  disabled={!fornecedor}
-  className="btn"
-  onClick={async () => {
-    try {
-      const existe = await verificarPedidoExistente(loja, fornecedor);
-      if (!existe) {
-        setStep(3);
-      }
-    } catch {
-      alert("Não foi possível verificar o pedido existente.");
-    }
-  }}
->
-  Ver produtos <ChevronRight size={16} />
-</button>
-                  </div>
-                </div>
-              )}
+    <div className="supplier-grid">
+      {fornecedores.map((nome) => {
+        const ativo = fornecedor === nome;
+        return (
+          <button
+            key={nome}
+            onClick={() => abrirProdutosDoFornecedor(nome)}
+            className={`store-card ${ativo ? "active" : ""}`}
+          >
+            <Building2 size={24} />
+            <p>{nome}</p>
+            <span>Ver produtos deste fornecedor</span>
+          </button>
+        );
+      })}
+    </div>
+  </div>
+)}
 
               {step === 3 && (
                 <div className="space-y">
@@ -1029,17 +1061,27 @@ const limparPedidosDaData = async () => {
           </div>
         </div>
 
-        <div className="main-grid">
-          <div className="side-column">
-            <TabelaResumoConsolidado
-  pedidos={pedidos}
-  dataFiltro={dataFiltro}
-  setDataFiltro={setDataFiltro}
-  onLimparData={limparPedidosDaData}
-/>
-            <OrdersList pedidos={pedidos} carregando={carregandoPedidos} onRefresh={carregarPedidos} />
+                {step === 1 && (
+          <div className="main-grid">
+            <div className="side-column">
+              <TabelaResumoConsolidado
+                pedidos={pedidos}
+                dataFiltro={dataFiltro}
+                setDataFiltro={setDataFiltro}
+                onLimparData={limparPedidosDaData}
+                filtroLojaResumo={filtroLojaResumo}
+                setFiltroLojaResumo={setFiltroLojaResumo}
+                filtroFornecedorResumo={filtroFornecedorResumo}
+                setFiltroFornecedorResumo={setFiltroFornecedorResumo}
+              />
+              <OrdersList
+                pedidos={pedidos}
+                carregando={carregandoPedidos}
+                onRefresh={carregarPedidos}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

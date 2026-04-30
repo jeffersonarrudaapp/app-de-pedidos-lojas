@@ -109,3 +109,36 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+.resumo-filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 320px;
+}
+
+.resumo-data-acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.resumo-data-acoes .input {
+  min-width: 170px;
+}
+
+@media (max-width: 900px) {
+  .resumo-filtros {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .resumo-data-acoes {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .resumo-data-acoes .input {
+    min-width: 100%;
+  }
+}
