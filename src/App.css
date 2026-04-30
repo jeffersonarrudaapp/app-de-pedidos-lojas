@@ -48,7 +48,7 @@ input {
   background: #ffffff;
   border-radius: 30px;
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid #edf0f4;
 }
 
@@ -235,8 +235,9 @@ input {
 .store-grid,
 .supplier-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+  width: 100%;
 }
 
 .store-card {
@@ -248,6 +249,9 @@ input {
   cursor: pointer;
   transition: all 0.22s ease;
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  width: 100%;
+min-width: 0;
+overflow: hidden;
 }
 
 .store-card:hover {
@@ -535,7 +539,18 @@ th {
   font-weight: 700;
   color: #4b5563;
 }
+.table-wrap tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
 
+.table-wrap tbody tr:nth-child(even) {
+  background: #eef1f5;
+}
+
+.table-wrap tbody tr:hover {
+  background: #eef2f8;
+  transition: background 0.2s ease;
+}
 .box-muted {
   background: #f3f4f6;
   border-radius: 18px;

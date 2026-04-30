@@ -142,3 +142,22 @@ code {
     min-width: 100%;
   }
 }
+.input-with-suffix {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-suffix-field {
+  width: 110px;
+  padding-right: 44px;
+}
+
+.input-suffix-text {
+  position: absolute;
+  right: 14px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 700;
+  pointer-events: none;
+}

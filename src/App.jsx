@@ -439,17 +439,34 @@ function QuantityRow({ item, quantity, onChange }) {
       <div className="quantity-controls">
         <p className="field-label">Pedido</p>
         <div className="control-group">
-          <button className="btn small outline" onClick={() => onChange(Math.max(0, Number((quantity - passo).toFixed(3))))}>-</button>
-          <input
-            type="number"
-            min="0"
-            step={passo}
-            value={quantity}
-            onChange={(e) => onChange(Math.max(0, Number(e.target.value || 0)))}
-            className="input small"
-          />
-          <button className="btn small" onClick={() => onChange(Number((quantity + passo).toFixed(3)))}>+</button>
-        </div>
+  <button
+    className="btn small outline"
+    onClick={() => onChange(Math.max(0, Number((quantity - passo).toFixed(3))))}
+  >
+    -
+  </button>
+
+  <div className="input-with-suffix">
+    <input
+      type="number"
+      min="0"
+      step={passo}
+      value={quantity}
+      onChange={(e) => onChange(Math.max(0, Number(e.target.value || 0)))}
+      className="input small input-suffix-field"
+    />
+    <span className="input-suffix-text">
+      {String(item.unidade).toLowerCase() === "kg" ? "kg" : "und"}
+    </span>
+  </div>
+
+  <button
+    className="btn small"
+    onClick={() => onChange(Number((quantity + passo).toFixed(3)))}
+  >
+    +
+  </button>
+</div>
       </div>
     </div>
   );
@@ -834,7 +851,7 @@ const limparPedidosDaData = async () => {
   <span>App de Pedidos</span>
   <span>das Lojas</span>
 </h1>
-<p className="subtitulo-app">Versão pronta para salvar pedidos em banco de dados com Supabase.</p>
+<p className="subtitulo-app">Sistema interno para lançamento de pedidos da produção.</p>
               </div>
               <div className="icon-box">
                 <ShoppingCart size={28} />
@@ -856,7 +873,7 @@ const limparPedidosDaData = async () => {
                 <div className="space-y">
                   <div>
                     <h2>Escolha sua loja</h2>
-                    <p>O funcionário seleciona a unidade antes de começar o pedido.</p>
+                    <p>Selecione a unidade antes de começar o pedido.</p>
                   </div>
 
                   <div className="store-grid">
@@ -1030,7 +1047,7 @@ const limparPedidosDaData = async () => {
             <div className="card-header">
               <div>
                 <h3 className="resumo-titulo">Resumo rápido</h3>
-<p className="resumo-subtitulo">Visão simples para o funcionário preencher sem erro.</p>  
+<p className="resumo-subtitulo">Visão simples preencher sem erro.</p>  
               </div>
             </div>
             <div className="card-content stats">
