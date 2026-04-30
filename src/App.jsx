@@ -904,9 +904,10 @@ const limparPedidosDaData = async () => {
               {step === 2 && (
   <div className="space-y">
     <div className="title-row">
-      <button className="btn outline small" onClick={() => setStep(1)}>
-        <ChevronLeft size={16} />
-      </button>
+      <button className="btn outline small btn-back" onClick={() => setStep(1)}>
+  <ChevronLeft size={16} />
+  Voltar
+</button>
       <div>
         <h2>Filtre a empresa</h2>
         <p>Escolha o fornecedor para mostrar só os produtos daquela empresa.</p>
@@ -935,9 +936,10 @@ const limparPedidosDaData = async () => {
               {step === 3 && (
                 <div className="space-y">
                   <div className="title-row">
-                    <button className="btn outline small" onClick={() => setStep(2)}>
-                      <ChevronLeft size={16} />
-                    </button>
+                    <button className="btn outline small btn-back" onClick={() => setStep(2)}>
+  <ChevronLeft size={16} />
+  Voltar
+</button>
                     <div>
                       <h2>Lançar pedido</h2>
                       <p>Digite as quantidades e confirme o envio.</p>

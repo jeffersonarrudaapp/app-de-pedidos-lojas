@@ -685,3 +685,7 @@ th {
 .btn-admin:hover {
   opacity: 1;
 }
+.btn-back {
+  min-width: 110px;
+  justify-content: center;
+}
