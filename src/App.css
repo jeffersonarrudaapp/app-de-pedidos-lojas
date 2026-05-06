@@ -689,3 +689,57 @@ th {
   min-width: 110px;
   justify-content: center;
 }
+.table-wrap table th:first-child,
+.table-wrap table td:first-child {
+  white-space: nowrap;
+  min-width: 110px;
+}
+.resumo-multifiltros {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.multi-filtro-box {
+  position: relative;
+}
+
+.multi-filtro-botao {
+  min-width: 220px;
+  justify-content: space-between;
+}
+
+.multi-filtro-painel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  width: 280px;
+  max-height: 320px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #dbe1e8;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
+}
+
+.multi-filtro-topo {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.multi-filtro-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.multi-filtro-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #111827;
+  font-size: 14px;
+}

@@ -519,16 +519,28 @@ function TabelaResumoConsolidado({
   dataFiltro,
   setDataFiltro,
   onLimparData,
-  filtroLojaResumo,
-  setFiltroLojaResumo,
-  filtroFornecedorResumo,
-  setFiltroFornecedorResumo,
+  filtrosLojasResumo,
+  setFiltrosLojasResumo,
+  filtrosFornecedoresResumo,
+  setFiltrosFornecedoresResumo,
+  abrirFiltroLojas,
+  setAbrirFiltroLojas,
+  abrirFiltroFornecedores,
+  setAbrirFiltroFornecedores,
+  alternarLojaResumo,
+  alternarFornecedorResumo,
+  selecionarTodasLojasResumo,
+  limparLojasResumo,
+  selecionarTodosFornecedoresResumo,
+  limparFornecedoresResumo,
 }) {
 const pedidosFiltradosResumo = pedidos.filter((pedido) => {
-  const okLoja = filtroLojaResumo ? pedido.loja === filtroLojaResumo : true;
-  const okFornecedor = filtroFornecedorResumo
-    ? pedido.fornecedor === filtroFornecedorResumo
-    : true;
+  const okLoja =
+    filtrosLojasResumo.length === 0 || filtrosLojasResumo.includes(pedido.loja);
+
+  const okFornecedor =
+    filtrosFornecedoresResumo.length === 0 ||
+    filtrosFornecedoresResumo.includes(pedido.fornecedor);
 
   return okLoja && okFornecedor;
 });
@@ -570,33 +582,83 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
     </button>
   </div>
 
-  <div className="resumo-data-acoes">
-    <select
-      className="input"
-      value={filtroLojaResumo}
-      onChange={(e) => setFiltroLojaResumo(e.target.value)}
+  <div className="resumo-multifiltros">
+  <div className="multi-filtro-box">
+    <button
+      type="button"
+      className="btn outline small multi-filtro-botao"
+      onClick={() => setAbrirFiltroLojas(!abrirFiltroLojas)}
     >
-      <option value="">Todas as lojas</option>
-      {lojas.map((nome) => (
-        <option key={nome} value={nome}>
-          {nome}
-        </option>
-      ))}
-    </select>
+      Lojas: {filtrosLojasResumo.length === 0 ? "todas" : `${filtrosLojasResumo.length} selecionadas`}
+    </button>
 
-    <select
-      className="input"
-      value={filtroFornecedorResumo}
-      onChange={(e) => setFiltroFornecedorResumo(e.target.value)}
-    >
-      <option value="">Todos os fornecedores</option>
-      {fornecedores.map((nome) => (
-        <option key={nome} value={nome}>
-          {nome}
-        </option>
-      ))}
-    </select>
+    {abrirFiltroLojas && (
+      <div className="multi-filtro-painel">
+        <div className="multi-filtro-topo">
+          <button type="button" className="btn outline small" onClick={selecionarTodasLojasResumo}>
+            Selecionar todas
+          </button>
+          <button type="button" className="btn outline small" onClick={limparLojasResumo}>
+            Limpar
+          </button>
+        </div>
+
+        <div className="multi-filtro-lista">
+          {lojas.map((nome) => (
+            <label key={nome} className="multi-filtro-item">
+              <input
+                type="checkbox"
+                checked={filtrosLojasResumo.includes(nome)}
+                onChange={() => alternarLojaResumo(nome)}
+              />
+              <span>{nome}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    )}
   </div>
+
+  <div className="multi-filtro-box">
+    <button
+      type="button"
+      className="btn outline small multi-filtro-botao"
+      onClick={() => setAbrirFiltroFornecedores(!abrirFiltroFornecedores)}
+    >
+      Fornecedores: {filtrosFornecedoresResumo.length === 0 ? "todos" : `${filtrosFornecedoresResumo.length} selecionados`}
+    </button>
+
+    {abrirFiltroFornecedores && (
+      <div className="multi-filtro-painel">
+        <div className="multi-filtro-topo">
+          <button
+            type="button"
+            className="btn outline small"
+            onClick={selecionarTodosFornecedoresResumo}
+          >
+            Selecionar todos
+          </button>
+          <button type="button" className="btn outline small" onClick={limparFornecedoresResumo}>
+            Limpar
+          </button>
+        </div>
+
+        <div className="multi-filtro-lista">
+          {fornecedores.map((nome) => (
+            <label key={nome} className="multi-filtro-item">
+              <input
+                type="checkbox"
+                checked={filtrosFornecedoresResumo.includes(nome)}
+                onChange={() => alternarFornecedorResumo(nome)}
+              />
+              <span>{nome}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</div>
 </div>
     </div>
       <div className="card-content">
@@ -606,33 +668,35 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
           <div className="table-wrap">
             <table>
               <thead>
-                <tr>
-                  <th>Produto</th>
-                  <th>Fornecedor</th>
-                  <th>Matriz</th>
-                  <th>Dumont</th>
-                  <th>Sumaré</th>
-                  <th>Gugão Pvai</th>
-                  <th>Gugão Nova L.</th>
-                  <th>Gugão Alto</th>
-                  <th>São Jorge</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
+  <tr>
+    <th>Código</th>
+    <th>Produto</th>
+    <th>Fornecedor</th>
+    <th>Matriz</th>
+    <th>Dumont</th>
+    <th>Sumaré</th>
+    <th>Gugão Pvai</th>
+    <th>Gugão Nova L.</th>
+    <th>Gugão Alto</th>
+    <th>São Jorge</th>
+    <th>Total</th>
+  </tr>
+</thead>
               <tbody>
                 {resumo.map((linha) => (
                   <tr key={`${linha.cod_produto}-${linha.produto}`}>
-                    <td>{linha.produto}</td>
-                    <td>{linha.fornecedor}</td>
-                    <td>{formatarNumero(linha.Matriz)}</td>
-                    <td>{formatarNumero(linha.Dumont)}</td>
-                    <td>{formatarNumero(linha["Sumaré"])}</td>
-                    <td>{formatarNumero(linha["Gugão Pvai"])}</td>
-                    <td>{formatarNumero(linha["Gugão Nova L."])}</td>
-                    <td>{formatarNumero(linha["Gugão Alto"])}</td>
-                    <td>{formatarNumero(linha["São Jorge"])}</td>
-                    <td><strong>{formatarNumero(linha.total)}</strong></td>
-                  </tr>
+  <td>{linha.cod_produto || "-"}</td>
+  <td>{linha.produto}</td>
+  <td>{linha.fornecedor}</td>
+  <td>{formatarNumero(linha.Matriz)}</td>
+  <td>{formatarNumero(linha.Dumont)}</td>
+  <td>{formatarNumero(linha["Sumaré"])}</td>
+  <td>{formatarNumero(linha["Gugão Pvai"])}</td>
+  <td>{formatarNumero(linha["Gugão Nova L."])}</td>
+  <td>{formatarNumero(linha["Gugão Alto"])}</td>
+  <td>{formatarNumero(linha["São Jorge"])}</td>
+  <td><strong>{formatarNumero(linha.total)}</strong></td>
+</tr>
                 ))}
               </tbody>
             </table>
@@ -650,8 +714,10 @@ export default function App() {
   const [busca, setBusca] = useState("");
   const [quantidades, setQuantidades] = useState({});
   const [dataFiltro, setDataFiltro] = useState(new Date().toISOString().slice(0, 10));
-  const [filtroLojaResumo, setFiltroLojaResumo] = useState("");
-  const [filtroFornecedorResumo, setFiltroFornecedorResumo] = useState("");
+  const [filtrosLojasResumo, setFiltrosLojasResumo] = useState([]);
+const [filtrosFornecedoresResumo, setFiltrosFornecedoresResumo] = useState([]);
+const [abrirFiltroLojas, setAbrirFiltroLojas] = useState(false);
+const [abrirFiltroFornecedores, setAbrirFiltroFornecedores] = useState(false);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
   const [modoConectado, setModoConectado] = useState(!!supabase);
@@ -783,6 +849,33 @@ setStep(5);
   setQuantidades({});
   setErro("");
   carregarPedidos();
+};
+const alternarLojaResumo = (nome) => {
+  setFiltrosLojasResumo((atual) =>
+    atual.includes(nome) ? atual.filter((item) => item !== nome) : [...atual, nome]
+  );
+};
+
+const alternarFornecedorResumo = (nome) => {
+  setFiltrosFornecedoresResumo((atual) =>
+    atual.includes(nome) ? atual.filter((item) => item !== nome) : [...atual, nome]
+  );
+};
+
+const selecionarTodasLojasResumo = () => {
+  setFiltrosLojasResumo(lojas);
+};
+
+const limparLojasResumo = () => {
+  setFiltrosLojasResumo([]);
+};
+
+const selecionarTodosFornecedoresResumo = () => {
+  setFiltrosFornecedoresResumo(fornecedores);
+};
+
+const limparFornecedoresResumo = () => {
+  setFiltrosFornecedoresResumo([]);
 };
 const limparPedidosDaData = async () => {
   const senha = window.prompt("Digite a senha de administrador para limpar os pedidos desta data:");
@@ -1084,15 +1177,25 @@ const limparPedidosDaData = async () => {
           <div className="main-grid">
             <div className="side-column">
               <TabelaResumoConsolidado
-                pedidos={pedidos}
-                dataFiltro={dataFiltro}
-                setDataFiltro={setDataFiltro}
-                onLimparData={limparPedidosDaData}
-                filtroLojaResumo={filtroLojaResumo}
-                setFiltroLojaResumo={setFiltroLojaResumo}
-                filtroFornecedorResumo={filtroFornecedorResumo}
-                setFiltroFornecedorResumo={setFiltroFornecedorResumo}
-              />
+  pedidos={pedidos}
+  dataFiltro={dataFiltro}
+  setDataFiltro={setDataFiltro}
+  onLimparData={limparPedidosDaData}
+  filtrosLojasResumo={filtrosLojasResumo}
+  setFiltrosLojasResumo={setFiltrosLojasResumo}
+  filtrosFornecedoresResumo={filtrosFornecedoresResumo}
+  setFiltrosFornecedoresResumo={setFiltrosFornecedoresResumo}
+  abrirFiltroLojas={abrirFiltroLojas}
+  setAbrirFiltroLojas={setAbrirFiltroLojas}
+  abrirFiltroFornecedores={abrirFiltroFornecedores}
+  setAbrirFiltroFornecedores={setAbrirFiltroFornecedores}
+  alternarLojaResumo={alternarLojaResumo}
+  alternarFornecedorResumo={alternarFornecedorResumo}
+  selecionarTodasLojasResumo={selecionarTodasLojasResumo}
+  limparLojasResumo={limparLojasResumo}
+  selecionarTodosFornecedoresResumo={selecionarTodosFornecedoresResumo}
+  limparFornecedoresResumo={limparFornecedoresResumo}
+/>
               <OrdersList
                 pedidos={pedidos}
                 carregando={carregandoPedidos}
