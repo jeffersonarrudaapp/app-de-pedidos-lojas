@@ -241,6 +241,14 @@ const produtos = [
   { id: 190, cod_forn: null, fornecedor: "LACTOLAR", cod_produto: 40212, nome: "PROVOLONE LACTOLAR", unidade: "KG", embalagem: "5kg" },
 
   { id: 191, cod_forn: null, fornecedor: "TOP MILK", cod_produto: 627097, nome: "TOP MILK CHEDDAR 1,2KG", unidade: "und", embalagem: "12und" },
+  { id: 192, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 603120, nome: "BACON FRIMESA FATIAS 1KG", unidade: "KG", embalagem: "9kg" },
+{ id: 193, cod_forn: null, fornecedor: "FRIOS LONDRINA", cod_produto: 151262, nome: "CHARQUE MANTA TRES LACOS KG", unidade: "KG", embalagem: "5kg" },
+{ id: 194, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63014, nome: "COB BARRA LE CACAU 1.01KG CHOC AO LEITE", unidade: "und", embalagem: "15und" },
+{ id: 195, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63016, nome: "COB BARRA LE CACAU 1.01KG CHOC BRANCO", unidade: "und", embalagem: "15und" },
+{ id: 196, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63015, nome: "COB BARRA LE CACAU 1.01KG CHOC MEIO AMARGO", unidade: "und", embalagem: "15und" },
+{ id: 197, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63017, nome: "COB CHIPS LE CACAU 1.01KG CHOC AO LEITE", unidade: "und", embalagem: "10und" },
+{ id: 198, cod_forn: null, fornecedor: "FRIELLA", cod_produto: 34534, nome: "LOMBO FRIELLA CANADENSE KG", unidade: "KG", embalagem: "8kg" },
+{ id: 199, cod_forn: null, fornecedor: "VILLEMAN", cod_produto: 56163, nome: "FATIA HUNGARA VILLEMAN KG", unidade: "KG", embalagem: "2kg" },
 ];
 
 const fornecedores = Array.from(new Set(produtos.map((p) => p.fornecedor))).sort();
