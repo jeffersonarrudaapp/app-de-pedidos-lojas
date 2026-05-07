@@ -249,6 +249,7 @@ const produtos = [
 { id: 197, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63017, nome: "COB CHIPS LE CACAU 1.01KG CHOC AO LEITE", unidade: "und", embalagem: "10und" },
 { id: 198, cod_forn: null, fornecedor: "FRIELLA", cod_produto: 34534, nome: "LOMBO FRIELLA CANADENSE KG", unidade: "KG", embalagem: "8kg" },
 { id: 199, cod_forn: null, fornecedor: "VILLEMAN", cod_produto: 56163, nome: "FATIA HUNGARA VILLEMAN KG", unidade: "KG", embalagem: "2kg" },
+{ id: 200, cod_forn: null, fornecedor: "LACTALIS", cod_produto: 50186, nome: "QUEIJO MUSSARELA PRESIDENT KG", unidade: "KG", embalagem: "12kg" },
 ];
 
 const fornecedores = Array.from(new Set(produtos.map((p) => p.fornecedor))).sort();
