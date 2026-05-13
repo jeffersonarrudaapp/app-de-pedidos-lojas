@@ -250,6 +250,9 @@ const produtos = [
 { id: 198, cod_forn: null, fornecedor: "FRIELLA", cod_produto: 34534, nome: "LOMBO FRIELLA CANADENSE KG", unidade: "KG", embalagem: "8kg" },
 { id: 199, cod_forn: null, fornecedor: "VILLEMAN", cod_produto: 56163, nome: "FATIA HUNGARA VILLEMAN KG", unidade: "KG", embalagem: "2kg" },
 { id: 200, cod_forn: null, fornecedor: "LACTALIS", cod_produto: 50186, nome: "QUEIJO MUSSARELA PRESIDENT KG", unidade: "KG", embalagem: "12kg" },
+{ id: 201, cod_forn: null, fornecedor: "ROTTA", cod_produto: 64461, nome: "ACUCAR PURATOS 2KG CONFEITEIRO EASY", unidade: "und", embalagem: "6und" },
+{ id: 202, cod_forn: null, fornecedor: "ROTTA", cod_produto: 34984, nome: "CHANTILLY CHANTYPAK PURATOS 1L TRADICIONAL", unidade: "und", embalagem: "12und" },
+{ id: 203, cod_forn: null, fornecedor: "ROTTA", cod_produto: 64462, nome: "MIST PARA SONHO TEGRAL PURATOS 2KG", unidade: "und", embalagem: "6und" },
 ];
 
 const fornecedores = Array.from(new Set(produtos.map((p) => p.fornecedor))).sort();
