@@ -253,6 +253,7 @@ const produtos = [
 { id: 201, cod_forn: null, fornecedor: "ROTTA", cod_produto: 64461, nome: "ACUCAR PURATOS 2KG CONFEITEIRO EASY", unidade: "und", embalagem: "6und" },
 { id: 202, cod_forn: null, fornecedor: "ROTTA", cod_produto: 34984, nome: "CHANTILLY CHANTYPAK PURATOS 1L TRADICIONAL", unidade: "und", embalagem: "12und" },
 { id: 203, cod_forn: null, fornecedor: "ROTTA", cod_produto: 64462, nome: "MIST PARA SONHO TEGRAL PURATOS 2KG", unidade: "und", embalagem: "6und" },
+{ id: 204, cod_forn: null, fornecedor: "ROTTA", cod_produto: 67692, nome: "CREME CONFEITEIRO PURATOS 800G CPT FINESSE", unidade: "und", embalagem: "15 und" },
 ];
 
 const fornecedores = Array.from(new Set(produtos.map((p) => p.fornecedor))).sort();

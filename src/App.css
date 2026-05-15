@@ -515,7 +515,9 @@ overflow: hidden;
   overflow: auto;
   border: 1px solid #e5e7eb;
   border-radius: 24px;
+  max-height: 650px;
 }
+
 
 table {
   width: 100%;
@@ -526,6 +528,13 @@ table {
 
 thead {
   background: #f9fafb;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: #f9fafb;
+  z-index: 2;
 }
 
 th,
