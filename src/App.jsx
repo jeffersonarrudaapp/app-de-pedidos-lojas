@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Store,
   Building2,
@@ -288,23 +288,58 @@ function formatarData(dataIso) {
     return dataIso;
   }
 }
+
+function agruparItensPorFornecedor(itens) {
+  return itens.reduce((grupos, item) => {
+    const nomeFornecedor = item.fornecedor;
+    if (!nomeFornecedor) return grupos;
+
+    if (!grupos.has(nomeFornecedor)) {
+      grupos.set(nomeFornecedor, []);
+    }
+
+    grupos.get(nomeFornecedor).push(item);
+    return grupos;
+  }, new Map());
+}
+
+function filtrarItensDoPedidoPorFornecedores(pedido, filtrosFornecedores) {
+  const itens = pedido.itens || [];
+
+  if (filtrosFornecedores.length === 0) {
+    return itens;
+  }
+
+  return itens.filter((item) => {
+    const fornecedorItem = item.fornecedor || pedido.fornecedor;
+    return filtrosFornecedores.includes(fornecedorItem);
+  });
+}
 async function salvarPedidoNoSupabase(payload) {
   if (!supabase) throw new Error("Supabase não configurado");
 
-  const hoje = new Date().toISOString().slice(0, 10);
+  const dataPedido = payload.dataPedido || new Date().toISOString().slice(0, 10);
+  const itensDoFornecedor = (payload.itens || []).filter((item) => {
+    const fornecedorItem = item.fornecedor || payload.fornecedor;
+    return fornecedorItem === payload.fornecedor;
+  });
+
+  if (itensDoFornecedor.length === 0) {
+    throw new Error(`Pedido sem itens para o fornecedor ${payload.fornecedor}`);
+  }
 
   const { data: pedidoExistente, error: buscaError } = await supabase
     .from("pedidos")
     .select("id")
     .eq("loja", payload.loja)
     .eq("fornecedor", payload.fornecedor)
-    .eq("data_pedido", hoje)
+    .eq("data_pedido", dataPedido)
     .maybeSingle();
 
   if (buscaError) throw buscaError;
 
   let pedidoId = null;
-  let pedidoFinal = null;
+  let pedidoFinal;
 
   if (pedidoExistente) {
     pedidoId = pedidoExistente.id;
@@ -322,7 +357,7 @@ async function salvarPedidoNoSupabase(payload) {
         loja: payload.loja,
         fornecedor: payload.fornecedor,
         status: "enviado",
-        data_pedido: hoje,
+        data_pedido: dataPedido,
       })
       .eq("id", pedidoId)
       .select()
@@ -337,7 +372,7 @@ async function salvarPedidoNoSupabase(payload) {
         loja: payload.loja,
         fornecedor: payload.fornecedor,
         status: "enviado",
-        data_pedido: hoje,
+        data_pedido: dataPedido,
       })
       .select()
       .single();
@@ -347,7 +382,7 @@ async function salvarPedidoNoSupabase(payload) {
     pedidoFinal = pedidoNovo;
   }
 
-  const itensInsert = payload.itens.map((item) => ({
+  const itensInsert = itensDoFornecedor.map((item) => ({
     pedido_id: pedidoId,
     cod_produto: item.cod_produto,
     produto: item.nome,
@@ -365,7 +400,7 @@ async function salvarPedidoNoSupabase(payload) {
     if (itensError) throw itensError;
   }
 
-  return { ...pedidoFinal, itens: payload.itens };
+  return { ...pedidoFinal, itens: itensDoFornecedor };
 }
 async function carregarPedidosDoSupabase(dataFiltro = null) {
   if (!supabase) return [];
@@ -395,12 +430,14 @@ function montarResumoConsolidado(pedidos) {
   pedidos.forEach((pedido) => {
     const loja = pedido.loja;
     (pedido.itens || []).forEach((item) => {
-      const chave = `${item.cod_produto || item.produto}-${item.produto || ""}`;
+      const fornecedorItem = item.fornecedor || pedido.fornecedor || "";
+      const nomeProduto = item.produto || item.nome || "";
+      const chave = `${fornecedorItem}-${item.cod_produto || nomeProduto}-${nomeProduto}`;
       if (!mapa.has(chave)) {
         mapa.set(chave, {
           cod_produto: item.cod_produto,
-          produto: item.produto || item.nome,
-          fornecedor: item.fornecedor || pedido.fornecedor,
+          produto: nomeProduto,
+          fornecedor: fornecedorItem,
           Matriz: 0,
           Dumont: 0,
           "Sumaré": 0,
@@ -533,9 +570,7 @@ function TabelaResumoConsolidado({
   setDataFiltro,
   onLimparData,
   filtrosLojasResumo,
-  setFiltrosLojasResumo,
   filtrosFornecedoresResumo,
-  setFiltrosFornecedoresResumo,
   abrirFiltroLojas,
   setAbrirFiltroLojas,
   abrirFiltroFornecedores,
@@ -547,16 +582,20 @@ function TabelaResumoConsolidado({
   selecionarTodosFornecedoresResumo,
   limparFornecedoresResumo,
 }) {
-const pedidosFiltradosResumo = pedidos.filter((pedido) => {
+const pedidosFiltradosResumo = pedidos
+  .filter((pedido) => {
   const okLoja =
     filtrosLojasResumo.length === 0 || filtrosLojasResumo.includes(pedido.loja);
 
-  const okFornecedor =
-    filtrosFornecedoresResumo.length === 0 ||
-    filtrosFornecedoresResumo.includes(pedido.fornecedor);
-
-  return okLoja && okFornecedor;
-});
+  return okLoja;
+})
+  .map((pedido) => ({
+    ...pedido,
+    itens: filtrarItensDoPedidoPorFornecedores(pedido, filtrosFornecedoresResumo),
+  }))
+  .filter(
+    (pedido) => filtrosFornecedoresResumo.length === 0 || pedido.itens.length > 0
+  );
 
 const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
   return (
@@ -757,6 +796,13 @@ const [abrirFiltroFornecedores, setAbrirFiltroFornecedores] = useState(false);
   const itensSelecionados = produtos
     .filter((p) => Number(quantidades[p.id]) > 0)
     .map((p) => ({ ...p, quantidade: Number(quantidades[p.id]) }));
+  const fornecedoresSelecionados = Array.from(
+    new Set(itensSelecionados.map((item) => item.fornecedor))
+  ).sort();
+  const fornecedorResumoPedido =
+    fornecedoresSelecionados.length <= 1
+      ? fornecedoresSelecionados[0] || fornecedor || "Nenhum"
+      : `${fornecedoresSelecionados.length} fornecedores`;
 
   const salvarQuantidade = (id, valor) => {
     setQuantidades((q) => ({ ...q, [id]: valor }));
@@ -788,21 +834,46 @@ const verificarPedidoExistente = async (lojaSelecionada, fornecedorSelecionado) 
 
   const novasQuantidades = {};
   (data.pedido_itens || []).forEach((item) => {
-    const produtoEncontrado = produtos.find(
-      (p) => String(p.cod_produto) === String(item.cod_produto)
-    );
+    const produtoEncontrado =
+      produtos.find(
+        (p) =>
+          String(p.cod_produto) === String(item.cod_produto) &&
+          (!item.fornecedor || p.fornecedor === item.fornecedor)
+      ) ||
+      produtos.find((p) => String(p.cod_produto) === String(item.cod_produto));
     if (produtoEncontrado) {
       novasQuantidades[produtoEncontrado.id] = Number(item.quantidade || 0);
     }
   });
 
-  setQuantidades(novasQuantidades);
+  const idsDoFornecedor = new Set(
+    produtos.filter((p) => p.fornecedor === fornecedorSelecionado).map((p) => p.id)
+  );
+
+  setQuantidades((quantidadesAtuais) => {
+    const proximasQuantidades = { ...quantidadesAtuais };
+    idsDoFornecedor.forEach((id) => {
+      delete proximasQuantidades[id];
+    });
+
+    Object.entries(novasQuantidades).forEach(([id, quantidade]) => {
+      const idNumerico = Number(id);
+      const pertenceAoFornecedorAtual = idsDoFornecedor.has(idNumerico);
+      const jaTemQuantidadeDigitada = Number(quantidadesAtuais[id] || 0) > 0;
+
+      if (pertenceAoFornecedorAtual || !jaTemQuantidadeDigitada) {
+        proximasQuantidades[id] = quantidade;
+      }
+    });
+
+    return proximasQuantidades;
+  });
   setBusca("");
   setStep(3);
 
   return true;
 };
-  const carregarPedidos = async () => {
+  const carregarPedidos = useCallback(async () => {
   setCarregandoPedidos(true);
   try {
     const dados = await carregarPedidosDoSupabase(dataFiltro);
@@ -814,11 +885,11 @@ const verificarPedidoExistente = async (lojaSelecionada, fornecedorSelecionado) 
   } finally {
     setCarregandoPedidos(false);
   }
-};
+}, [dataFiltro]);
 
   useEffect(() => {
-  carregarPedidos();
-}, [dataFiltro]);
+  void Promise.resolve().then(carregarPedidos);
+}, [carregarPedidos]);
 const abrirProdutosDoFornecedor = async (nomeFornecedor) => {
   setFornecedor(nomeFornecedor);
 
@@ -837,14 +908,24 @@ const abrirProdutosDoFornecedor = async (nomeFornecedor) => {
 };
   const enviarPedido = async () => {
     setErro("");
+
+    const pedidosPorFornecedor = agruparItensPorFornecedor(itensSelecionados);
+
+    if (pedidosPorFornecedor.size === 0) {
+      setErro("Informe ao menos um item para salvar o pedido.");
+      return;
+    }
+
     setSalvando(true);
     try {
-      const payload = {
-        loja,
-        fornecedor,
-        itens: itensSelecionados,
-      };
-      await salvarPedidoNoSupabase(payload);
+      for (const [nomeFornecedor, itens] of pedidosPorFornecedor) {
+        await salvarPedidoNoSupabase({
+          loja,
+          fornecedor: nomeFornecedor,
+          dataPedido: dataFiltro,
+          itens,
+        });
+      }
 await carregarPedidos();
 setStep(5);
     } catch {
@@ -1106,7 +1187,7 @@ const limparPedidosDaData = async () => {
                     </div>
                     <div className="stat-box">
                       <p>Fornecedor</p>
-                      <strong>{fornecedor}</strong>
+                      <strong>{fornecedorResumoPedido}</strong>
                     </div>
                   </div>
 
@@ -1115,7 +1196,10 @@ const limparPedidosDaData = async () => {
                       <div key={item.id} className="review-item">
                         <div>
                           <p className="product-name">{item.nome}</p>
-                          <p className="muted">{item.embalagem}</p>
+                          <p className="muted">
+                            {fornecedoresSelecionados.length > 1 ? `${item.fornecedor} • ` : ""}
+                            {item.embalagem}
+                          </p>
                         </div>
                         <span className="badge">{formatarNumero(item.quantidade)}</span>
                       </div>
