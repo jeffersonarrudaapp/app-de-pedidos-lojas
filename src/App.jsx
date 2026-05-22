@@ -254,6 +254,7 @@ const produtos = [
 { id: 202, cod_forn: null, fornecedor: "ROTTA", cod_produto: 34984, nome: "CHANTILLY CHANTYPAK PURATOS 1L TRADICIONAL", unidade: "und", embalagem: "12und" },
 { id: 203, cod_forn: null, fornecedor: "ROTTA", cod_produto: 64462, nome: "MIST PARA SONHO TEGRAL PURATOS 2KG", unidade: "und", embalagem: "6und" },
 { id: 204, cod_forn: null, fornecedor: "ROTTA", cod_produto: 67692, nome: "CREME CONFEITEIRO PURATOS 800G CPT FINESSE", unidade: "und", embalagem: "15 und" },
+{ id: 205, cod_forn: null, fornecedor: "BONASSE/DISPAN", cod_produto: 67862, nome: "PISTACHE CRU SEM CASCA INTEIRO KG", unidade: "KG", embalagem: "1kg" },
 ];
 
 const fornecedores = Array.from(new Set(produtos.map((p) => p.fornecedor))).sort();
