@@ -213,6 +213,8 @@ const produtos = [
   { id: 168, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 58023, nome: "TEMPERO P/SUSHI AZUMA 5L", unidade: "und", embalagem: "4 und" },
   { id: 169, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 61995, nome: "ORNAMENTO PLASTICO BARAN CAIXA C/1.000 FOLHAS", unidade: "und", embalagem: "1 und" },
   { id: 170, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 61922, nome: "MOEDOR DE GERGILIM MANUAL PLAST GOMASURIKI", unidade: "und", embalagem: "1 und" },
+  { id: 206, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 68122, nome: "GERGELIM KAMAL 1KG BRANCO", unidade: "und", embalagem: "10 und" },
+  { id: 207, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 68123, nome: "GERGELIM KAMAL 1KG PRETO", unidade: "und", embalagem: "10 und" },
   { id: 171, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 599131, nome: "MOLHO SHOYO MITSUWA PREMIUM 8ML SACHE CX C/ 250UND", unidade: "und", embalagem: "4 und" },
   { id: 172, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 59695, nome: "MOLHO TARE MITSUWA 12G SACHE CX C/ 250UND", unidade: "und", embalagem: "4 und" },
 
@@ -254,6 +256,7 @@ const produtos = [
 { id: 202, cod_forn: null, fornecedor: "ROTTA", cod_produto: 34984, nome: "CHANTILLY CHANTYPAK PURATOS 1L TRADICIONAL", unidade: "und", embalagem: "12und" },
 { id: 203, cod_forn: null, fornecedor: "ROTTA", cod_produto: 64462, nome: "MIST PARA SONHO TEGRAL PURATOS 2KG", unidade: "und", embalagem: "6und" },
 { id: 204, cod_forn: null, fornecedor: "ROTTA", cod_produto: 67692, nome: "CREME CONFEITEIRO PURATOS 800G CPT FINESSE", unidade: "und", embalagem: "15 und" },
+{ id: 208, cod_forn: null, fornecedor: "ROTTA", cod_produto: 68121, nome: "DESTAK DESMOLDANTE PURATOS 600ML SPRAY", unidade: "und", embalagem: "6 und" },
 { id: 205, cod_forn: null, fornecedor: "BONASSE/DISPAN", cod_produto: 67862, nome: "PISTACHE CRU SEM CASCA INTEIRO KG", unidade: "KG", embalagem: "1kg" },
 ];
 
