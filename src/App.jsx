@@ -228,9 +228,9 @@ const produtos = [
   { id: 179, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 146242, nome: "APRESUNTADO GD", unidade: "KG", embalagem: "14kg" },
   { id: 180, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 492876, nome: "APRESUNTADO AM", unidade: "KG", embalagem: "14kg" },
   { id: 181, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 201618, nome: "BACON MANTA", unidade: "KG", embalagem: "11kg" },
-  { id: 182, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 146471, nome: "CALABRESA NORMAL", unidade: "KG", embalagem: "6kg" },
+  { id: 182, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 146471, nome: "CALABRESA NORMAL", unidade: "KG", embalagem: "15kg" },
   { id: 183, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 582883, nome: "CALABRESA RETA", unidade: "KG", embalagem: "12kg" },
-  { id: 184, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 300179, nome: "PRESUNTO FRIMESA", unidade: "KG", embalagem: "14kg" },
+  { id: 184, cod_forn: null, fornecedor: "FRIMESA", cod_produto: 300179, nome: "PRESUNTO FRIMESA", unidade: "KG", embalagem: "13,600kg" },
 
   { id: 185, cod_forn: null, fornecedor: "LITORAL", cod_produto: 12703, nome: "LITORAL", unidade: "KG", embalagem: "24kg" },
   { id: 186, cod_forn: null, fornecedor: "TAPIRACUI", cod_produto: 146765, nome: "TAPIRACUI", unidade: "KG", embalagem: "24kg" },
