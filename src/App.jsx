@@ -764,6 +764,8 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
 }
 
 export default function App() {
+  const APP_EM_MANUTENCAO = true;
+
   const [step, setStep] = useState(1);
   const [loja, setLoja] = useState("");
   const [fornecedor, setFornecedor] = useState("");
@@ -1031,6 +1033,22 @@ const limparPedidosDaData = async () => {
     console.error(error);
   }
 };
+  if (APP_EM_MANUTENCAO) {
+  return (
+    <div className="page">
+      <div className="container">
+        <div className="card">
+          <div className="card-content" style={{ textAlign: "center", padding: "60px 30px" }}>
+            <h1 className="titulo-app">Sistema temporariamente indisponível</h1>
+            <p className="subtitulo-app" style={{ maxWidth: "100%", marginTop: "14px" }}>
+              Tente novamente mais tarde.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
   return (
     <div className="page">
       <div className="container">
