@@ -764,7 +764,7 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
 }
 
 export default function App() {
-  const APP_EM_MANUTENCAO = true;
+  const APP_EM_MANUTENCAO = false;
 
   const [step, setStep] = useState(1);
   const [loja, setLoja] = useState("");
