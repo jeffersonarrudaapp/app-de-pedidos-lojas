@@ -14,7 +14,7 @@ import {
 import { createClient } from "@supabase/supabase-js";
 import "./App.css";
 
-const lojas = [
+const LOJAS_PADRAO = [
   "Matriz",
   "Dumont",
   "Sumaré",
@@ -23,6 +23,8 @@ const lojas = [
   "Gugão Alto",
   "São Jorge",
 ];
+
+const lojas = LOJAS_PADRAO;
 
 const produtos = [
   { id: 1, cod_forn: 587664, fornecedor: "NUTRIBREADS", cod_produto: 23911, nome: "PÃO FRANÇES CONGELADO", unidade: "KG", embalagem: "10KG" },
@@ -260,15 +262,49 @@ const produtos = [
 { id: 205, cod_forn: null, fornecedor: "BONASSE/DISPAN", cod_produto: 67862, nome: "PISTACHE CRU SEM CASCA INTEIRO KG", unidade: "KG", embalagem: "1kg" },
 ];
 
-const fornecedores = Array.from(new Set(produtos.map((p) => p.fornecedor))).sort();
+const fornecedores = Array.from(
+  new Set(
+    (Array.isArray(produtos) ? produtos : [])
+      .map((p) => p.fornecedor)
+      .filter(Boolean)
+  )
+).sort();
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const ADMIN_PASSWORD = "9104";
-const supabase =
-  SUPABASE_URL && SUPABASE_ANON_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-    : null;
+const IS_DEV = Boolean(import.meta.env.DEV);
+
+function logDev(mensagem, detalhes) {
+  if (!IS_DEV) return;
+
+  if (detalhes) {
+    console.warn(`[App de Pedidos] ${mensagem}`, detalhes);
+    return;
+  }
+
+  console.warn(`[App de Pedidos] ${mensagem}`);
+}
+
+function criarClienteSupabaseSeguro() {
+  const url = String(SUPABASE_URL || "").trim();
+  const anonKey = String(SUPABASE_ANON_KEY || "").trim();
+
+  if (!url || !anonKey) {
+    logDev("Supabase não configurado. O app seguirá com as listas padrão.");
+    return null;
+  }
+
+  try {
+    new URL(url);
+    return createClient(url, anonKey);
+  } catch (error) {
+    logDev("Falha ao inicializar o Supabase. O app seguirá com as listas padrão.", error);
+    return null;
+  }
+}
+
+const supabase = criarClienteSupabaseSeguro();
 
 function getStepFromEmbalagem(embalagem) {
   if (!embalagem) return 1;
@@ -308,15 +344,16 @@ function agruparItensPorFornecedor(itens) {
 }
 
 function filtrarItensDoPedidoPorFornecedores(pedido, filtrosFornecedores) {
-  const itens = pedido.itens || [];
+  const filtros = Array.isArray(filtrosFornecedores) ? filtrosFornecedores : [];
+  const itens = Array.isArray(pedido?.itens) ? pedido.itens.filter(Boolean) : [];
 
-  if (filtrosFornecedores.length === 0) {
+  if (filtros.length === 0) {
     return itens;
   }
 
   return itens.filter((item) => {
-    const fornecedorItem = item.fornecedor || pedido.fornecedor;
-    return filtrosFornecedores.includes(fornecedorItem);
+    const fornecedorItem = item.fornecedor || pedido?.fornecedor;
+    return filtros.includes(fornecedorItem);
   });
 }
 async function salvarPedidoNoSupabase(payload) {
@@ -431,9 +468,11 @@ async function carregarPedidosDoSupabase(dataFiltro = null) {
 function montarResumoConsolidado(pedidos) {
   const mapa = new Map();
 
-  pedidos.forEach((pedido) => {
+  (Array.isArray(pedidos) ? pedidos.filter(Boolean) : []).forEach((pedido) => {
     const loja = pedido.loja;
-    (pedido.itens || []).forEach((item) => {
+    const itens = Array.isArray(pedido.itens) ? pedido.itens.filter(Boolean) : [];
+
+    itens.forEach((item) => {
       const fornecedorItem = item.fornecedor || pedido.fornecedor || "";
       const nomeProduto = item.produto || item.nome || "";
       const chave = `${fornecedorItem}-${item.cod_produto || nomeProduto}-${nomeProduto}`;
@@ -527,6 +566,8 @@ function QuantityRow({ item, quantity, onChange }) {
 }
 
 function OrdersList({ pedidos, carregando, onRefresh }) {
+  const pedidosSeguros = Array.isArray(pedidos) ? pedidos.filter(Boolean) : [];
+
   return (
     <div className="card">
       <div className="card-header">
@@ -540,10 +581,10 @@ function OrdersList({ pedidos, carregando, onRefresh }) {
       </div>
       <div className="card-content">
         {carregando && <div className="box-muted">Carregando pedidos...</div>}
-        {!carregando && pedidos.length === 0 && (
+        {!carregando && pedidosSeguros.length === 0 && (
           <div className="box-muted">Nenhum pedido salvo ainda.</div>
         )}
-        {pedidos.map((pedido) => (
+        {pedidosSeguros.map((pedido) => (
           <div key={pedido.id} className="order-card">
             <div className="order-top">
               <div>
@@ -552,10 +593,10 @@ function OrdersList({ pedidos, carregando, onRefresh }) {
                   {pedido.fornecedor} • {formatarData(pedido.created_at)}
                 </p>
               </div>
-              <span className="badge">{pedido.itens?.length || 0} itens</span>
+              <span className="badge">{Array.isArray(pedido.itens) ? pedido.itens.length : 0} itens</span>
             </div>
             <div className="order-items">
-              {(pedido.itens || []).map((item, idx) => (
+              {(Array.isArray(pedido.itens) ? pedido.itens : []).map((item, idx) => (
                 <div key={`${pedido.id}-${idx}`} className="order-item">
                   <span>{item.produto || item.nome}</span>
                   <strong>{formatarNumero(item.quantidade)}</strong>
@@ -586,19 +627,25 @@ function TabelaResumoConsolidado({
   selecionarTodosFornecedoresResumo,
   limparFornecedoresResumo,
 }) {
-const pedidosFiltradosResumo = pedidos
+const lojasResumo = Array.isArray(lojas) && lojas.length > 0 ? lojas : LOJAS_PADRAO;
+const filtrosLojasSeguros = Array.isArray(filtrosLojasResumo) ? filtrosLojasResumo : [];
+const filtrosFornecedoresSeguros = Array.isArray(filtrosFornecedoresResumo)
+  ? filtrosFornecedoresResumo
+  : [];
+
+const pedidosFiltradosResumo = (Array.isArray(pedidos) ? pedidos.filter(Boolean) : [])
   .filter((pedido) => {
   const okLoja =
-    filtrosLojasResumo.length === 0 || filtrosLojasResumo.includes(pedido.loja);
+    filtrosLojasSeguros.length === 0 || filtrosLojasSeguros.includes(pedido.loja);
 
   return okLoja;
 })
   .map((pedido) => ({
     ...pedido,
-    itens: filtrarItensDoPedidoPorFornecedores(pedido, filtrosFornecedoresResumo),
+    itens: filtrarItensDoPedidoPorFornecedores(pedido, filtrosFornecedoresSeguros),
   }))
   .filter(
-    (pedido) => filtrosFornecedoresResumo.length === 0 || pedido.itens.length > 0
+    (pedido) => filtrosFornecedoresSeguros.length === 0 || pedido.itens.length > 0
   );
 
 const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
@@ -660,11 +707,11 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
         </div>
 
         <div className="multi-filtro-lista">
-          {lojas.map((nome) => (
+          {lojasResumo.map((nome) => (
             <label key={nome} className="multi-filtro-item">
               <input
                 type="checkbox"
-                checked={filtrosLojasResumo.includes(nome)}
+                checked={filtrosLojasSeguros.includes(nome)}
                 onChange={() => alternarLojaResumo(nome)}
               />
               <span>{nome}</span>
@@ -704,7 +751,7 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
             <label key={nome} className="multi-filtro-item">
               <input
                 type="checkbox"
-                checked={filtrosFornecedoresResumo.includes(nome)}
+                checked={filtrosFornecedoresSeguros.includes(nome)}
                 onChange={() => alternarFornecedorResumo(nome)}
               />
               <span>{nome}</span>
@@ -782,6 +829,7 @@ const [abrirFiltroFornecedores, setAbrirFiltroFornecedores] = useState(false);
   const [pedidos, setPedidos] = useState([]);
   const [carregandoPedidos, setCarregandoPedidos] = useState(false);
 
+  const lojasDisponiveis = Array.isArray(lojas) && lojas.length > 0 ? lojas : LOJAS_PADRAO;
   const progresso = step === 1 ? 25 : step === 2 ? 50 : step === 3 ? 75 : 100;
 
   const itensFiltrados = useMemo(() => {
@@ -885,7 +933,8 @@ const verificarPedidoExistente = async (lojaSelecionada, fornecedorSelecionado) 
     const dados = await carregarPedidosDoSupabase(dataFiltro);
     setPedidos(dados);
     setModoConectado(!!supabase);
-  } catch {
+  } catch (error) {
+    logDev("Falha ao carregar pedidos do Supabase.", error);
     setPedidos([]);
     setModoConectado(false);
   } finally {
@@ -908,8 +957,11 @@ const abrirProdutosDoFornecedor = async (nomeFornecedor) => {
     } else {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  } catch {
-    alert("Não foi possível verificar o pedido existente.");
+  } catch (error) {
+    logDev("Falha ao verificar pedido existente. Seguindo para a lista de produtos.", error);
+    setModoConectado(false);
+    setStep(3);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 };
   const enviarPedido = async () => {
@@ -934,7 +986,8 @@ const abrirProdutosDoFornecedor = async (nomeFornecedor) => {
       }
 await carregarPedidos();
 setStep(5);
-    } catch {
+    } catch (error) {
+      logDev("Falha ao salvar pedido.", error);
       setErro("Não foi possível salvar o pedido agora.");
     } finally {
       setSalvando(false);
@@ -951,19 +1004,25 @@ setStep(5);
   carregarPedidos();
 };
 const alternarLojaResumo = (nome) => {
-  setFiltrosLojasResumo((atual) =>
-    atual.includes(nome) ? atual.filter((item) => item !== nome) : [...atual, nome]
-  );
+  setFiltrosLojasResumo((atual) => {
+    const filtrosAtuais = Array.isArray(atual) ? atual : [];
+    return filtrosAtuais.includes(nome)
+      ? filtrosAtuais.filter((item) => item !== nome)
+      : [...filtrosAtuais, nome];
+  });
 };
 
 const alternarFornecedorResumo = (nome) => {
-  setFiltrosFornecedoresResumo((atual) =>
-    atual.includes(nome) ? atual.filter((item) => item !== nome) : [...atual, nome]
-  );
+  setFiltrosFornecedoresResumo((atual) => {
+    const filtrosAtuais = Array.isArray(atual) ? atual : [];
+    return filtrosAtuais.includes(nome)
+      ? filtrosAtuais.filter((item) => item !== nome)
+      : [...filtrosAtuais, nome];
+  });
 };
 
 const selecionarTodasLojasResumo = () => {
-  setFiltrosLojasResumo(lojas);
+  setFiltrosLojasResumo(lojasDisponiveis);
 };
 
 const limparLojasResumo = () => {
@@ -978,6 +1037,11 @@ const limparFornecedoresResumo = () => {
   setFiltrosFornecedoresResumo([]);
 };
 const limparPedidosDaData = async () => {
+  if (!supabase) {
+    alert("Não foi possível limpar os pedidos porque o banco de dados não está conectado.");
+    return;
+  }
+
   const senha = window.prompt("Digite a senha de administrador para limpar os pedidos desta data:");
 
   if (senha === null) return;
@@ -1030,7 +1094,7 @@ const limparPedidosDaData = async () => {
     alert("Pedidos da data removidos com sucesso.");
   } catch (error) {
     alert("Não foi possível limpar os pedidos dessa data.");
-    console.error(error);
+    logDev("Falha ao limpar pedidos da data.", error);
   }
 };
   if (APP_EM_MANUTENCAO) {
@@ -1086,7 +1150,7 @@ const limparPedidosDaData = async () => {
                   </div>
 
                   <div className="store-grid">
-                    {lojas.map((nome) => {
+                    {lojasDisponiveis.map((nome) => {
                       const ativo = loja === nome;
                       return (
                         <button
