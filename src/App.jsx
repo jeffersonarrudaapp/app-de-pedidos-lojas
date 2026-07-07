@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Component, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Store,
   Building2,
@@ -305,6 +305,31 @@ function criarClienteSupabaseSeguro() {
 }
 
 const supabase = criarClienteSupabaseSeguro();
+
+class RenderSafeBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    logDev("Falha ao renderizar uma seção do app.", { error, info });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback || (
+        <div className="box-muted">Não foi possível carregar esta seção agora.</div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 function getStepFromEmbalagem(embalagem) {
   if (!embalagem) return 1;
@@ -1359,6 +1384,9 @@ const limparPedidosDaData = async () => {
                 {step === 1 && (
           <div className="main-grid">
             <div className="side-column">
+              <RenderSafeBoundary
+                fallback={<div className="box-muted">Não foi possível carregar o resumo agora.</div>}
+              >
               <TabelaResumoConsolidado
   pedidos={pedidos}
   dataFiltro={dataFiltro}
@@ -1379,11 +1407,16 @@ const limparPedidosDaData = async () => {
   selecionarTodosFornecedoresResumo={selecionarTodosFornecedoresResumo}
   limparFornecedoresResumo={limparFornecedoresResumo}
 />
+              </RenderSafeBoundary>
+              <RenderSafeBoundary
+                fallback={<div className="box-muted">Não foi possível carregar o histórico agora.</div>}
+              >
               <OrdersList
                 pedidos={pedidos}
                 carregando={carregandoPedidos}
                 onRefresh={carregarPedidos}
               />
+              </RenderSafeBoundary>
             </div>
           </div>
         )}
