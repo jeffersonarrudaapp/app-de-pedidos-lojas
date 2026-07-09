@@ -22,6 +22,8 @@ const LOJAS_PADRAO = [
   "Gugão Nova L.",
   "Gugão Alto",
   "São Jorge",
+  "Gugão Casa China",
+  "Gugão Nova Esperança",
 ];
 
 const lojas = LOJAS_PADRAO;
@@ -506,13 +508,10 @@ function montarResumoConsolidado(pedidos) {
           cod_produto: item.cod_produto,
           produto: nomeProduto,
           fornecedor: fornecedorItem,
-          Matriz: 0,
-          Dumont: 0,
-          "Sumaré": 0,
-          "Gugão Pvai": 0,
-          "Gugão Nova L.": 0,
-          "Gugão Alto": 0,
-          "São Jorge": 0,
+          ...LOJAS_PADRAO.reduce((acumulador, nomeLoja) => {
+            acumulador[nomeLoja] = 0;
+            return acumulador;
+          }, {}),
           total: 0,
         });
       }
@@ -800,13 +799,9 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
     <th>Código</th>
     <th>Produto</th>
     <th>Fornecedor</th>
-    <th>Matriz</th>
-    <th>Dumont</th>
-    <th>Sumaré</th>
-    <th>Gugão Pvai</th>
-    <th>Gugão Nova L.</th>
-    <th>Gugão Alto</th>
-    <th>São Jorge</th>
+    {lojasResumo.map((nome) => (
+      <th key={nome}>{nome}</th>
+    ))}
     <th>Total</th>
   </tr>
 </thead>
@@ -816,13 +811,9 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
   <td>{linha.cod_produto || "-"}</td>
   <td>{linha.produto}</td>
   <td>{linha.fornecedor}</td>
-  <td>{formatarNumero(linha.Matriz)}</td>
-  <td>{formatarNumero(linha.Dumont)}</td>
-  <td>{formatarNumero(linha["Sumaré"])}</td>
-  <td>{formatarNumero(linha["Gugão Pvai"])}</td>
-  <td>{formatarNumero(linha["Gugão Nova L."])}</td>
-  <td>{formatarNumero(linha["Gugão Alto"])}</td>
-  <td>{formatarNumero(linha["São Jorge"])}</td>
+  {lojasResumo.map((nome) => (
+    <td key={nome}>{formatarNumero(linha[nome])}</td>
+  ))}
   <td><strong>{formatarNumero(linha.total)}</strong></td>
 </tr>
                 ))}
