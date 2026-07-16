@@ -39,6 +39,7 @@ const produtos = [
   { id: 7, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10265, nome: "MINI SALGADO OYSHI FRITO KG COXINHA DE CARNE (PADARIA)", unidade: "KG", embalagem: "4kg" },
   { id: 8, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10477, nome: "MINI SALGADO OYSHI FRITO KG COXINHA DE COSTELA (PADARIA)", unidade: "KG", embalagem: "4kg" },
   { id: 9, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10266, nome: "MINI SALGADO OYSHI FRITO KG COXINHA DE FRANGO (PADARIA)", unidade: "KG", embalagem: "4kg" },
+  { id: 209, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 69524, nome: "MINI SALGADO OYSHI FRITO KG COXINHA DE FRANGO CREAM CHEESE (PADARIA)", unidade: "KG", embalagem: "4kg" },
   { id: 10, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10268, nome: "MINI SALGADO OYSHI FRITO KG KIBE REQUEIJAO (PADARIA)", unidade: "KG", embalagem: "4kg" },
   { id: 11, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10271, nome: "MINI SALGADO OYSHI FRITO KG RISOLES DE CARNE (PADARIA)", unidade: "KG", embalagem: "4kg" },
   { id: 12, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10273, nome: "MINI SALGADO OYSHI FRITO KG RISOLES DE PIZZA (PADARIA)", unidade: "KG", embalagem: "4kg" },
