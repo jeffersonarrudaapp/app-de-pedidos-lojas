@@ -123,7 +123,6 @@ const produtos = [
   { id: 89, cod_forn: 63115, fornecedor: "ITAIQUARA", cod_produto: 626813, nome: "CORANTE SOFT GEL 60G VERDE FOLHA", unidade: "und", embalagem: "6 und" },
   { id: 90, cod_forn: 63115, fornecedor: "ITAIQUARA", cod_produto: 43884, nome: "CORANTE SOFT GEL 60G VERMELHO NATAL", unidade: "und", embalagem: "6 und" },
   { id: 91, cod_forn: 63115, fornecedor: "ITAIQUARA", cod_produto: 48480, nome: "CORANTE SOFTGEL BRANCO LEITE 25 GR", unidade: "und", embalagem: "6 und" },
-  { id: 92, cod_forn: 63115, fornecedor: "ITAIQUARA", cod_produto: 497371, nome: "CREME CONFEITEIRO ITAIQUARA 1KG", unidade: "und", embalagem: "10 und" },
   { id: 93, cod_forn: 63115, fornecedor: "ITAIQUARA", cod_produto: 36899, nome: "EMULSIFICANTE MARVIGEL 10KG PLUS", unidade: "und", embalagem: "1 und" },
   { id: 94, cod_forn: 63115, fornecedor: "ITAIQUARA", cod_produto: 21613, nome: "ESSENCIA DE BAUNILHA AROMAX 960ML", unidade: "und", embalagem: "1 und" },
   { id: 95, cod_forn: 63115, fornecedor: "ITAIQUARA", cod_produto: 21172, nome: "ESSENCIA P PANETONE AROMA MIX 960ML", unidade: "und", embalagem: "1 und" },
@@ -141,7 +140,6 @@ const produtos = [
   { id: 106, cod_forn: 1000354, fornecedor: "PENIEL", cod_produto: 58433, nome: "CHANTILY FLAVOR RIGHT CHOCOLATE 907G", unidade: "und", embalagem: "12 und" },
   { id: 107, cod_forn: 1000354, fornecedor: "PENIEL", cod_produto: 35922, nome: "MIST P BOMBA ECLAIR IREKS 600G", unidade: "und", embalagem: "10 und" },
 
-  { id: 108, cod_forn: 2172, fornecedor: "EMULZINT", cod_produto: 548707, nome: "DESMOLDANTE EMULZINT CARLEX 600ML SPRAY", unidade: "und", embalagem: "6 und" },
   { id: 109, cod_forn: 2172, fornecedor: "EMULZINT", cod_produto: 14036, nome: "MIST P BROWNIE EMULZINT 10KG", unidade: "und", embalagem: "1 und" },
   { id: 110, cod_forn: 2172, fornecedor: "EMULZINT", cod_produto: 14660, nome: "MIST P BRIOCHE EMULZINT 10KG", unidade: "und", embalagem: "1 und" },
   { id: 111, cod_forn: 2172, fornecedor: "EMULZINT", cod_produto: 14039, nome: "MIST P PAO TRIGALE EMULZINT 10KG INTEGRAL", unidade: "und", embalagem: "1 und" },
