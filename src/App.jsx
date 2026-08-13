@@ -10,6 +10,7 @@ import {
   Filter,
   Database,
   RefreshCw,
+  Download,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 import "./App.css";
@@ -529,6 +530,52 @@ function montarResumoConsolidado(pedidos) {
   );
 }
 
+function escaparCsv(valor) {
+  const texto = String(valor ?? "");
+  return `"${texto.replace(/"/g, '""')}"`;
+}
+
+function baixarArquivo(nomeArquivo, conteudo, tipo) {
+  const blob = new Blob([conteudo], { type: tipo });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = nomeArquivo;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function exportarResumoPorFornecedor(resumo, lojasExportacao, dataFiltro) {
+  const linhasOrdenadas = [...resumo].sort((a, b) => {
+    const porFornecedor = String(a.fornecedor).localeCompare(String(b.fornecedor), "pt-BR");
+    if (porFornecedor !== 0) return porFornecedor;
+
+    return String(a.produto).localeCompare(String(b.produto), "pt-BR");
+  });
+  const cabecalho = ["Fornecedor", "Codigo", "Produto", ...lojasExportacao, "Total"];
+  const linhas = [
+    cabecalho,
+    ...linhasOrdenadas.map((linha) => [
+      linha.fornecedor,
+      linha.cod_produto || "",
+      linha.produto,
+      ...lojasExportacao.map((nome) => formatarNumero(linha[nome])),
+      formatarNumero(linha.total),
+    ]),
+  ];
+  const csv = `\uFEFF${linhas.map((linha) => linha.map(escaparCsv).join(";")).join("\r\n")}`;
+  const dataArquivo = dataFiltro || new Date().toISOString().slice(0, 10);
+
+  baixarArquivo(
+    `produtos_por_fornecedor_${dataArquivo}.csv`,
+    csv,
+    "text/csv;charset=utf-8;"
+  );
+}
+
 function StepChip({ active, done, number, label }) {
   return (
     <div className="step-chip">
@@ -672,6 +719,17 @@ const pedidosFiltradosResumo = (Array.isArray(pedidos) ? pedidos.filter(Boolean)
   );
 
 const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
+const lojasExportacao = lojasResumo.filter(
+  (nome) => filtrosLojasSeguros.length === 0 || filtrosLojasSeguros.includes(nome)
+);
+const exportarProdutosPorFornecedor = () => {
+  if (resumo.length === 0) {
+    window.alert("Nenhum dado para exportar.");
+    return;
+  }
+
+  exportarResumoPorFornecedor(resumo, lojasExportacao, dataFiltro);
+};
   return (
       <div className="card">
     <div className="card-header resumo-header">
@@ -785,6 +843,16 @@ const resumo = montarResumoConsolidado(pedidosFiltradosResumo);
     )}
   </div>
 </div>
+
+  <button
+    type="button"
+    className="btn small resumo-exportar"
+    onClick={exportarProdutosPorFornecedor}
+    disabled={resumo.length === 0}
+  >
+    <Download size={16} />
+    Exportar por fornecedor
+  </button>
 </div>
     </div>
       <div className="card-content">

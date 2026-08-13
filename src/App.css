@@ -711,6 +711,12 @@ th {
   flex-wrap: wrap;
 }
 
+.resumo-exportar {
+  align-self: flex-start;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
 .multi-filtro-box {
   position: relative;
 }
