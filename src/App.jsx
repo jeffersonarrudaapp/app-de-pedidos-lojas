@@ -140,6 +140,7 @@ const produtos = [
   { id: 105, cod_forn: 1000354, fornecedor: "PENIEL", cod_produto: 14150, nome: "CHANTILY FLAVOR RIGHT BAUNILHA 907G", unidade: "und", embalagem: "12 und" },
   { id: 106, cod_forn: 1000354, fornecedor: "PENIEL", cod_produto: 58433, nome: "CHANTILY FLAVOR RIGHT CHOCOLATE 907G", unidade: "und", embalagem: "12 und" },
   { id: 107, cod_forn: 1000354, fornecedor: "PENIEL", cod_produto: 35922, nome: "MIST P BOMBA ECLAIR IREKS 600G", unidade: "und", embalagem: "10 und" },
+  { id: 211, cod_forn: 1000354, fornecedor: "PENIEL", cod_produto: 66574, nome: "GELEIA NEUTRA REFORPAN 2.1KG", unidade: "und", embalagem: "1 und" },
 
   { id: 109, cod_forn: 2172, fornecedor: "EMULZINT", cod_produto: 14036, nome: "MIST P BROWNIE EMULZINT 10KG", unidade: "und", embalagem: "1 und" },
   { id: 110, cod_forn: 2172, fornecedor: "EMULZINT", cod_produto: 14660, nome: "MIST P BRIOCHE EMULZINT 10KG", unidade: "und", embalagem: "1 und" },
@@ -159,6 +160,7 @@ const produtos = [
   { id: 123, cod_forn: 2676, fornecedor: "PENNACCHI", cod_produto: 607770, nome: "COB BARRA HARALD CONFEITEIRO 1 010KG BRANCO", unidade: "und", embalagem: "10 und" },
   { id: 124, cod_forn: 2676, fornecedor: "PENNACCHI", cod_produto: 607797, nome: "COB BARRA HARALD CONFEITEIRO 1 010KG MEIO AMARGO", unidade: "und", embalagem: "10 und" },
   { id: 125, cod_forn: 2676, fornecedor: "PENNACCHI", cod_produto: 607789, nome: "COB BARRA HARALD CONFEITEIRO 1,010KG AO LEITE", unidade: "und", embalagem: "10 und" },
+  { id: 210, cod_forn: 2676, fornecedor: "PENNACCHI", cod_produto: 10951, nome: "CHOCOLATE GOTAS CHIPS HARALD 2,5KG", unidade: "und", embalagem: "4 und" },
   { id: 126, cod_forn: 2676, fornecedor: "PENNACCHI", cod_produto: 618217, nome: "GANACHE MELKEN 4KG BRANCO", unidade: "und", embalagem: "4 und" },
   { id: 127, cod_forn: 2676, fornecedor: "PENNACCHI", cod_produto: 618373, nome: "GANACHE MELKEN 4KG CHOCOLATE AO LEITE", unidade: "und", embalagem: "4 und" },
   { id: 128, cod_forn: 2676, fornecedor: "PENNACCHI", cod_produto: 618209, nome: "GANACHE MELKEN 4KG MEIO AMARGO", unidade: "und", embalagem: "4 und" },
@@ -187,9 +189,6 @@ const produtos = [
   { id: 144, cod_forn: 2744, fornecedor: "VABENE /POLPA NORTE", cod_produto: 48838, nome: "CEREAL MINI VABENE 500G COB BRANCO", unidade: "und", embalagem: "10 und" },
   { id: 145, cod_forn: 2744, fornecedor: "VABENE /POLPA NORTE", cod_produto: 48839, nome: "CEREAL MINI VABENE 500G COB MISTO", unidade: "und", embalagem: "10 und" },
   { id: 146, cod_forn: 2744, fornecedor: "VABENE /POLPA NORTE", cod_produto: 35926, nome: "CREME DE AVELA C/ CACAU VABENE 3KG", unidade: "und", embalagem: "1 und" },
-
-  { id: 147, cod_forn: 127795, fornecedor: "AUREA", cod_produto: 621285, nome: "DOCE DE LEITE AUREA 9 8KG SORO TRADICIONAL", unidade: "und", embalagem: "1 und" },
-  { id: 148, cod_forn: 127795, fornecedor: "AUREA", cod_produto: 621307, nome: "GELEIA BRILHO AUREA 4KG NEUTRO", unidade: "und", embalagem: "1 und" },
 
   { id: 149, cod_forn: 2624, fornecedor: "APINOR", cod_produto: 644854, nome: "MEL DE ABELHA APINOR 5KG SILVESTRE BALDE", unidade: "und", embalagem: "10 und" },
 
@@ -252,7 +251,6 @@ const produtos = [
 { id: 194, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63014, nome: "COB BARRA LE CACAU 1.01KG CHOC AO LEITE", unidade: "und", embalagem: "15und" },
 { id: 195, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63016, nome: "COB BARRA LE CACAU 1.01KG CHOC BRANCO", unidade: "und", embalagem: "15und" },
 { id: 196, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63015, nome: "COB BARRA LE CACAU 1.01KG CHOC MEIO AMARGO", unidade: "und", embalagem: "15und" },
-{ id: 197, cod_forn: null, fornecedor: "LE CACAU", cod_produto: 63017, nome: "COB CHIPS LE CACAU 1.01KG CHOC AO LEITE", unidade: "und", embalagem: "10und" },
 { id: 198, cod_forn: null, fornecedor: "FRIELLA", cod_produto: 34534, nome: "LOMBO FRIELLA CANADENSE KG", unidade: "KG", embalagem: "8kg" },
 { id: 199, cod_forn: null, fornecedor: "VILLEMAN", cod_produto: 56163, nome: "FATIA HUNGARA VILLEMAN KG", unidade: "KG", embalagem: "2kg" },
 { id: 200, cod_forn: null, fornecedor: "LACTALIS", cod_produto: 50186, nome: "QUEIJO MUSSARELA PRESIDENT KG", unidade: "KG", embalagem: "12kg" },
