@@ -208,7 +208,6 @@ const produtos = [
 
   { id: 161, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 58022, nome: "ALGA MARINHA FUKUMATSU 50FLS 140G", unidade: "und", embalagem: "50 und" },
   { id: 162, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 12045, nome: "ARROZ MINAMI MAI 5KG CURTO JAPONES T1", unidade: "und", embalagem: "6 und" },
-  { id: 163, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 61994, nome: "ARROZ MINAMI MAI 5KG LONGO JAPONES T1", unidade: "und", embalagem: "6 und" },
   { id: 164, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 294080, nome: "ESTEIRA DE BAMBOO 1LINHA L SEC SUSHI MAT", unidade: "und", embalagem: "10 und" },
   { id: 165, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 58025, nome: "MOLHO DE PIMENTA SWEET CHILI KIKKOMAN 5L", unidade: "und", embalagem: "1 und" },
   { id: 166, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 58026, nome: "PALITO HASHI MAKI 50 PARES BAMBU CHANFRADO", unidade: "und", embalagem: "10 und" },
