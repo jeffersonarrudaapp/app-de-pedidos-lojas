@@ -51,6 +51,7 @@ const produtos = [
   { id: 18, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 301230, nome: "SALGADO GRANDE OYSHI FRITO KG KIBE RECHEADO", unidade: "KG", embalagem: "4kg" },
   { id: 19, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 436330, nome: "SALGADO GRANDE OYSHI FRITO KG RISOLES DE CARNE", unidade: "KG", embalagem: "4kg" },
 
+  { id: 212, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 57053, nome: "CHIPA VILLEMAN KG", unidade: "KG", embalagem: "2kg" },
   { id: 20, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55468, nome: "PAO VILLEMAN FRANCES KG", unidade: "KG", embalagem: "10kg" },
   { id: 21, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55469, nome: "PAO VILLEMAN CURITIBANO KG", unidade: "KG", embalagem: "10kg" },
   { id: 22, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55470, nome: "PAO VILLEMAN CASEIRO KG", unidade: "KG", embalagem: "7,5kg" },
@@ -206,6 +207,7 @@ const produtos = [
   { id: 159, cod_forn: 2513, fornecedor: "TIA OFELIA", cod_produto: 32234, nome: "MIST P BOLO OFELIA 5KG PAO DE LO", unidade: "und", embalagem: "2 und" },
   { id: 160, cod_forn: 2513, fornecedor: "TIA OFELIA", cod_produto: 57369, nome: "MIST P BOLO OFELIA 5KG FUBA", unidade: "und", embalagem: "5 und" },
 
+  { id: 213, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 69987, nome: "GENGIBRE ROSADO PALITO EM CONSERVA 1,4 KG MAC ASIAONE", unidade: "und", embalagem: "12 und" },
   { id: 161, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 58022, nome: "ALGA MARINHA FUKUMATSU 50FLS 140G", unidade: "und", embalagem: "50 und" },
   { id: 162, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 12045, nome: "ARROZ MINAMI MAI 5KG CURTO JAPONES T1", unidade: "und", embalagem: "6 und" },
   { id: 164, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 294080, nome: "ESTEIRA DE BAMBOO 1LINHA L SEC SUSHI MAT", unidade: "und", embalagem: "10 und" },
