@@ -207,6 +207,8 @@ const produtos = [
   { id: 159, cod_forn: 2513, fornecedor: "TIA OFELIA", cod_produto: 32234, nome: "MIST P BOLO OFELIA 5KG PAO DE LO", unidade: "und", embalagem: "2 und" },
   { id: 160, cod_forn: 2513, fornecedor: "TIA OFELIA", cod_produto: 57369, nome: "MIST P BOLO OFELIA 5KG FUBA", unidade: "und", embalagem: "5 und" },
 
+  { id: 214, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 28297, nome: "FARINHA PANKO ALFA 1KG", unidade: "und", embalagem: "10 und" },
+  { id: 215, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 599204, nome: "MOLHO TARE MITSUWA 5L", unidade: "und", embalagem: "1 und" },
   { id: 213, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 69987, nome: "GENGIBRE ROSADO PALITO EM CONSERVA 1,4 KG MAC ASIAONE", unidade: "und", embalagem: "12 und" },
   { id: 161, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 58022, nome: "ALGA MARINHA FUKUMATSU 50FLS 140G", unidade: "und", embalagem: "50 und" },
   { id: 162, cod_forn: 2787, fornecedor: "YOSHIDA", cod_produto: 12045, nome: "ARROZ MINAMI MAI 5KG CURTO JAPONES T1", unidade: "und", embalagem: "6 und" },
