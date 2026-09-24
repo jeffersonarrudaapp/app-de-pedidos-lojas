@@ -31,8 +31,8 @@ const lojas = LOJAS_PADRAO;
 
 const produtos = [
   { id: 1, cod_forn: 587664, fornecedor: "NUTRIBREADS", cod_produto: 23911, nome: "PÃO FRANÇES CONGELADO", unidade: "KG", embalagem: "7KG" },
-  { id: 2, cod_forn: 587664, fornecedor: "NUTRIBREADS", cod_produto: 23634, nome: "PÃO BAGUETE", unidade: "KG", embalagem: "7KG" },
-  { id: 3, cod_forn: 587664, fornecedor: "NUTRIBREADS", cod_produto: 23633, nome: "PÃO CURITIBANO", unidade: "KG", embalagem: "7KG" },
+  { id: 2, cod_forn: 587664, fornecedor: "NUTRIBREADS", cod_produto: 23634, nome: "PÃO BAGUETE", unidade: "KG", embalagem: "10KG" },
+  { id: 3, cod_forn: 587664, fornecedor: "NUTRIBREADS", cod_produto: 23633, nome: "PÃO CURITIBANO", unidade: "KG", embalagem: "10KG" },
 
   { id: 4, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10267, nome: "MINI SALGADO OYSHI FRITO KG BOLINHA DE QUEIJO (PADARIA)", unidade: "KG", embalagem: "4kg" },
   { id: 5, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10264, nome: "MINI SALGADO OYSHI FRITO KG BOLINHO DE CARNE SECA (PADARIA)", unidade: "KG", embalagem: "4kg" },
