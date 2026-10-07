@@ -46,10 +46,6 @@ const produtos = [
   { id: 12, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 10273, nome: "MINI SALGADO OYSHI FRITO KG RISOLES DE PIZZA (PADARIA)", unidade: "KG", embalagem: "4kg" },
   { id: 13, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 42665, nome: "PAO DE QUEIJO OYSHI CONGELADO KG PADARIA", unidade: "KG", embalagem: "4kg" },
   { id: 14, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 25059, nome: "PAO DE QUEIJO OYSHI RECHEADO KG FRANGO", unidade: "KG", embalagem: "4kg" },
-  { id: 16, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 279862, nome: "SALGADO GRANDE OYSHI FRITO KG COXINHA DE CARNE", unidade: "KG", embalagem: "4kg" },
-  { id: 17, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 536415, nome: "SALGADO GRANDE OYSHI FRITO KG COXINHA DE FRANGO", unidade: "KG", embalagem: "4kg" },
-  { id: 18, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 301230, nome: "SALGADO GRANDE OYSHI FRITO KG KIBE RECHEADO", unidade: "KG", embalagem: "4kg" },
-  { id: 19, cod_forn: 633712, fornecedor: "OYSHI", cod_produto: 436330, nome: "SALGADO GRANDE OYSHI FRITO KG RISOLES DE CARNE", unidade: "KG", embalagem: "4kg" },
 
   { id: 212, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 57053, nome: "CHIPA VILLEMAN KG", unidade: "KG", embalagem: "2kg" },
   { id: 20, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55468, nome: "PAO VILLEMAN FRANCES KG", unidade: "KG", embalagem: "10kg" },
