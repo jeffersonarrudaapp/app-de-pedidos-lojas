@@ -49,6 +49,7 @@ const produtos = [
   { id: 21, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55469, nome: "PAO VILLEMAN CURITIBANO KG", unidade: "KG", embalagem: "10kg" },
   { id: 22, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55470, nome: "PAO VILLEMAN CASEIRO KG", unidade: "KG", embalagem: "7,5kg" },
   { id: 23, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55471, nome: "PAO VILLEMAN BAGUETE TRADICIONAL KG", unidade: "KG", embalagem: "10kg" },
+  { id: 217, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55473, nome: "PAO VILLEMAN BISNAGUINHA KG", unidade: "KG", embalagem: "10kg" },
   { id: 28, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55476, nome: "PAO VILLEMAN DOCE KG", unidade: "KG", embalagem: "5kg" },
   { id: 32, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55480, nome: "PAO VILLEMAN MELAO KG", unidade: "KG", embalagem: "7,5kg" },
   { id: 38, cod_forn: 49524, fornecedor: "VILLEMAN", cod_produto: 55486, nome: "PAO VILLEMAN TRANCA KG", unidade: "KG", embalagem: "7,5kg" },
