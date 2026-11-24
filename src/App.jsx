@@ -241,6 +241,7 @@ const produtos = [
 { id: 203, cod_forn: null, fornecedor: "ROTTA", cod_produto: 64462, nome: "MIST PARA SONHO TEGRAL PURATOS 2KG", unidade: "und", embalagem: "6und" },
 { id: 204, cod_forn: null, fornecedor: "ROTTA", cod_produto: 67692, nome: "CREME CONFEITEIRO PURATOS 800G CPT FINESSE", unidade: "und", embalagem: "15 und" },
 { id: 208, cod_forn: null, fornecedor: "ROTTA", cod_produto: 68121, nome: "DESTAK DESMOLDANTE PURATOS 600ML SPRAY", unidade: "und", embalagem: "6 und" },
+{ id: 216, cod_forn: null, fornecedor: "ROTTA", cod_produto: 73829, nome: "MIST P/PANETONE PURATOS 10KG DELUXE C/GEMA", unidade: "und", embalagem: "1 und" },
 { id: 205, cod_forn: null, fornecedor: "BONASSE/DISPAN", cod_produto: 67862, nome: "PISTACHE CRU SEM CASCA INTEIRO KG", unidade: "KG", embalagem: "1kg" },
 ];
 
